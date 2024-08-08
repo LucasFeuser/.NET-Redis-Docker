@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  api:
+    image: ${DOCKER_REGISTRY}api-dotnet
+    build:
+      context: .
+      dockerfile: /Redis.Lab.API/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development  
+      - REDIS_CONNECTION=redis
+    ports:
+      - 5000:8080
+    depends_on:
+      - redis
+    networks:
+      - redis-net
+
+  redis:
+    image: redis:alpine
+    networks:
+      - redis-net
+
+networks:
+  redis-net:
+    driver: bridge
